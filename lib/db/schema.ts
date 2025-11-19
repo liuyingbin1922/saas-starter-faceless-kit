@@ -77,6 +77,7 @@ export const teamsRelations = relations(teams, ({ many }) => ({
 export const usersRelations = relations(users, ({ many }) => ({
   teamMembers: many(teamMembers),
   invitationsSent: many(invitations),
+  musicTracks: many(musicTracks),
 }));
 
 export const invitationsRelations = relations(invitations, ({ one }) => ({
@@ -122,11 +123,40 @@ export type ActivityLog = typeof activityLogs.$inferSelect;
 export type NewActivityLog = typeof activityLogs.$inferInsert;
 export type Invitation = typeof invitations.$inferSelect;
 export type NewInvitation = typeof invitations.$inferInsert;
+export type MusicTrack = typeof musicTracks.$inferSelect;
+export type NewMusicTrack = typeof musicTracks.$inferInsert;
 export type TeamDataWithMembers = Team & {
   teamMembers: (TeamMember & {
     user: Pick<User, 'id' | 'name' | 'email'>;
   })[];
 };
+
+export const musicTracks = pgTable('music_tracks', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => users.id),
+  title: varchar('title', { length: 255 }),
+  description: text('description'),
+  lyrics: text('lyrics'),
+  audioUrl: text('audio_url'),
+  imageUrl: text('image_url'),
+  status: varchar('status', { length: 20 }).notNull().default('pending'),
+  sunoTaskId: varchar('suno_task_id', { length: 255 }),
+  duration: integer('duration'),
+  tags: text('tags'),
+  instrumental: varchar('instrumental', { length: 10 }).default('false'),
+  isPrivate: varchar('is_private', { length: 10 }).default('false'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const musicTracksRelations = relations(musicTracks, ({ one }) => ({
+  user: one(users, {
+    fields: [musicTracks.userId],
+    references: [users.id],
+  }),
+}));
 
 export enum ActivityType {
   SIGN_UP = 'SIGN_UP',

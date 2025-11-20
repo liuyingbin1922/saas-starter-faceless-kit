@@ -423,10 +423,10 @@ export default function MusicGeneratorPage() {
   const progress = totalSeconds > 0 ? (currentTime / totalSeconds) * 100 : 0;
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white pb-24">
-      <div className="flex h-screen">
+    <main className="h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white overflow-hidden flex flex-col">
+      <div className="flex flex-1 min-h-0">
         {/* 左侧操作区 */}
-        <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 overflow-y-auto">
+        <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 overflow-y-auto flex-shrink-0">
           <div className="space-y-6">
             {/* 模式切换 */}
             <div className="flex justify-center">
@@ -792,7 +792,7 @@ export default function MusicGeneratorPage() {
         </div>
 
         {/* 右侧预览区 */}
-        <div className="flex-1 bg-gray-50 dark:bg-gray-900 p-6 overflow-y-auto">
+        <div className="flex-1 bg-gray-50 dark:bg-gray-900 p-6 overflow-y-auto min-w-0">
           {/* 隐藏的音频播放器 */}
           {currentTrack?.audioUrl && (
             <audio

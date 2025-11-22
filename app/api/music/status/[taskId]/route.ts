@@ -7,7 +7,7 @@ import { SunoClient } from '@/lib/suno/client';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { taskId: string } }
+  { params }: { params: Promise<{ taskId: string }> }
 ) {
   try {
     const user = await getUser();
@@ -15,7 +15,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const taskId = params.taskId;
+    const { taskId } = await params;
 
     // 查询数据库中的记录
     const [track] = await db
